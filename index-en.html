@@ -492,7 +492,7 @@ document.querySelectorAll('.langsw button').forEach(b=>b.onclick=()=>{const want
     st.speed = radii[Math.min(radii.length - 1, mx)] / 3.2; // the wave reaches the farthest accent in 3.2 s
     st.acc = v.acc.map(a => { const d = v.dots[a[0]], p = proj(d[0], d[1]); return { x: p[0], y: p[1], t: d[2], sz: Math.max(2.4, spPx * .3) * a[2], r: radii[a[1]], di: a[0] }; });
     st.links = v.links.map(([i, j], k) => ({ a: i, b: j, lag: v.lags ? v.lags[k] : 0, pts: linkPts(v.dots[v.acc[i][0]], v.dots[v.acc[j][0]], v.bows && v.bows[k]) })).filter((l, k) => !((cfg.cine && cfg.cine.drop) || []).includes(k));
-    st.T = Math.max(...st.links.map(l => st.acc[l.a].r / st.speed + .6 + l.lag + 2.2)) - 1.0; // the next impulse starts a second before the last arc is gone
+    st.T = cfg.one ? Math.max(...st.links.map(l => st.acc[l.a].r / st.speed + .6 + l.lag + cfg.one.dur + 1.4)) + 2 : Math.max(...st.links.map(l => st.acc[l.a].r / st.speed + .6 + l.lag + 2.2)) - 1.0; // the next impulse starts a second before the last arc is gone
     const g = base.getContext('2d'); g.setTransform(DPR, 0, 0, DPR, 0, 0); g.clearRect(0, 0, w, h);
     st.rBase = Math.max(1.6, spPx * .3);
     for (const d of v.dots) { const p = proj(d[0], d[1]); g.fillStyle = 'rgba(255,255,255,.92)'; g.beginPath(); g.arc(p[0], p[1], st.rBase, 0, 6.283); g.fill(); }
